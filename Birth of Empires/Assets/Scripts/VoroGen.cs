@@ -14,6 +14,10 @@ public class VoroGen : MonoBehaviour
 
     public Vector2[,] points;
     Vector2Int CellDimensions;
+
+    public ClickableZone[,] provinces;
+
+    public ClickManager clickManager;
     // Start is called before the first frame update
     private void Awake() {
         me = GetComponent<RawImage>();
@@ -57,24 +61,41 @@ public class VoroGen : MonoBehaviour
                     }
                 }
                 tex.SetPixel(i,j, colors[(int)nearestPoint.x, (int)nearestPoint.y]);
+                //provinces[i,j].MyColor = colors[(int)nearestPoint.x, (int)nearestPoint.y];
             }
         }
         tex.Apply();
         me.texture = tex;
         File.WriteAllBytes("./Assets/ClickableMap.png", tex.EncodeToPNG());
+        int I = 0;
+        foreach (ClickableZone C in provinces)
+        {
+            I++;
+            var NewProvince = new GameObject($"Province{I}");
+            var ProvData = NewProvince.AddComponent<Province>();
+            ProvData.MyClickableZone = C;
+            clickManager.provinces.Add(ProvData);
+        }
+    }
+    public Vector3 GetPointsArea(){
+        return new Vector3();
     }
     void GenPoints(){
         colors = new Color[GridSize,GridSize];
         points = new Vector2[GridSize,GridSize];
+        provinces = new ClickableZone[GridSize,GridSize];
         for (int i = 0; i < GridSize; i++)
         {
             for (int j = 0; j < GridSize; j++)
             {
                 points[i,j] = new Vector2(i*CellDimensions.x+Random.Range(0, CellDimensions.x),j*CellDimensions.y+Random.Range(0, CellDimensions.y));
+                provinces[i,j] = new ClickableZone(); 
+                provinces[i,j].MyPoint = points[i,j];
                 //colors[i,j] = allColors[Random.Range(0, allColors.Length)];
-                var CLr = new Color(Random.Range(0, 1f),Random.Range(0, 1f),Random.Range(0, 1f));
-                colors[i,j] = CLr;
-                Debug.Log(points[i,j]);
+                var Clr = new Color(Random.Range(0, 1f),Random.Range(0, 1f),Random.Range(0, 1f));
+                colors[i,j] = Clr;
+                provinces[i,j].MyColor = colors[i,j];
+                //Debug.Log(points[i,j]);
             }
         }
     }
