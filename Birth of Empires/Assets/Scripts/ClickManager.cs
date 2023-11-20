@@ -23,9 +23,20 @@ public class ClickManager : MonoBehaviour
     void Update()
     {
         if(Input.GetMouseButtonDown(0)){
-            var ClickedPoint = Input.mousePosition;
+            var ClickedPoint = voroCam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            var RayHit = Physics.Raycast(voroCam.ScreenPointToRay(Input.mousePosition), out hit);
+              Renderer rend = hit.transform.GetComponent<Renderer>();
+        MeshCollider meshCollider = hit.collider as MeshCollider;
+           
             
-            Color32 CheckColor = texture.GetPixel((int)ClickedPoint.x, (int)ClickedPoint.y);
+      
+        Vector2 pixelUV = hit.textureCoord;
+        pixelUV.x *= texture.width;
+        pixelUV.y *= texture.height;
+
+      
+            Color32 CheckColor = texture.GetPixel((int)pixelUV.x, (int)pixelUV.y);
           
             //Debug.Log(CheckColor);
             sprite.color = CheckColor;
@@ -36,7 +47,7 @@ public class ClickManager : MonoBehaviour
 
                 if (DifferenceInColors(p.MyClickableZone.MyColor, CheckColor) == 0)
                 {
-                    Debug.Log("cats");
+                    
                     p.OnLClick();   
                 }
             }
