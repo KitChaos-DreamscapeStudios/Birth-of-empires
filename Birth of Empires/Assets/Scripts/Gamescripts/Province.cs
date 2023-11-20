@@ -19,6 +19,6 @@ public class Province : MonoBehaviour
         
     }
     public void OnLClick(){
-        Debug.Log("unga");
+        Debug.Log(name);
     }
 }

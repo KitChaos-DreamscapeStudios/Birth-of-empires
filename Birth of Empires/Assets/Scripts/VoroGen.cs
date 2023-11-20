@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class VoroGen : MonoBehaviour
 {
-    Color[] allColors;
-    Color[,] colors;
+    Color32[] allColors;
+    public Color32[,] colors;
     public Vector2Int Size;
     public RawImage me;
 
@@ -81,7 +81,7 @@ public class VoroGen : MonoBehaviour
         return new Vector3();
     }
     void GenPoints(){
-        colors = new Color[GridSize,GridSize];
+        colors = new Color32[GridSize,GridSize];
         points = new Vector2[GridSize,GridSize];
         provinces = new ClickableZone[GridSize,GridSize];
         for (int i = 0; i < GridSize; i++)
@@ -92,7 +92,7 @@ public class VoroGen : MonoBehaviour
                 provinces[i,j] = new ClickableZone(); 
                 provinces[i,j].MyPoint = points[i,j];
                 //colors[i,j] = allColors[Random.Range(0, allColors.Length)];
-                var Clr = new Color(Random.Range(0, 1f),Random.Range(0, 1f),Random.Range(0, 1f));
+                var Clr = new Color32((byte)Random.Range(0, 255f), (byte)Random.Range(0, 255f), (byte)Random.Range(0, 255f), 255);
                 colors[i,j] = Clr;
                 provinces[i,j].MyColor = colors[i,j];
                 //Debug.Log(points[i,j]);

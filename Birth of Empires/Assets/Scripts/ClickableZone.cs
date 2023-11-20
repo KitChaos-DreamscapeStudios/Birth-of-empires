@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class ClickableZone
 {
-    public Color MyColor;
+    public Color32 MyColor;
     public Vector2 MyPoint;
     // Start is called before the first frame update
     void Start()

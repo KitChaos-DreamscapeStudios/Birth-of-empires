@@ -8,6 +8,11 @@ public class ClickManager : MonoBehaviour
     public Camera voroCam;
     public VoroGen gen;
     public List<Province> provinces;
+    public Texture2D texture;
+
+    public SpriteRenderer sprite;
+
+    public SpriteRenderer sprite2;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,12 +25,16 @@ public class ClickManager : MonoBehaviour
         if(Input.GetMouseButtonDown(0)){
             var ClickedPoint = Input.mousePosition;
             
-            Color CheckColor = toTexture2D(voroCam.activeTexture).GetPixel((int)ClickedPoint.x, (int)ClickedPoint.y);
-            Debug.Log(CheckColor);
+            Color32 CheckColor = texture.GetPixel((int)ClickedPoint.x, (int)ClickedPoint.y);
+          
+            //Debug.Log(CheckColor);
+            sprite.color = CheckColor;
             foreach (Province p in provinces)
             {
-                Debug.Log(p.MyClickableZone.MyColor);
-                if (p.MyClickableZone.MyColor == CheckColor)
+                //Debug.Log(p.MyClickableZone.MyColor);
+                //Debug.Log(p.name + " "+ DifferenceInColors(p.MyClickableZone.MyColor, CheckColor));
+
+                if (DifferenceInColors(p.MyClickableZone.MyColor, CheckColor) == 0)
                 {
                     Debug.Log("cats");
                     p.OnLClick();   
@@ -36,14 +45,14 @@ public class ClickManager : MonoBehaviour
     }
     Texture2D toTexture2D(RenderTexture rTex)
 {
-    Texture2D tex = new Texture2D(512, 512, TextureFormat.RGB24, false);
+    Texture2D tex = new Texture2D(512, 512, TextureFormat.RGBA32, false);
     // ReadPixels looks at the active RenderTexture.
     RenderTexture.active = rTex;
     tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
     tex.Apply();
     return tex;
 }
-float DifferenceInColors(Color One, Color Two){
+float DifferenceInColors(Color32 One, Color32 Two){
     var r1 = One.r;
     var g1 = One.g;
     var b1 = One.b;
